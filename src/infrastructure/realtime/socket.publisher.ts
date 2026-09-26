@@ -17,7 +17,7 @@ export class SocketIoPublisher implements IRealtimePublisher {
     if (!this.io) {
       return;
     }
-    // Broadcast on default namespace '/'
+    
     this.io.emit('slot.booked', {
       slotId: payload.slotId,
       bookingId: payload.bookingId,

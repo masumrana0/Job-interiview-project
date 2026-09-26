@@ -3,7 +3,7 @@ import { SlotEntity } from '../../domain/entities';
 import { ISlotRepository } from '../../domain/repositories';
 
 export class PrismaSlotRepository implements ISlotRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient) { }
 
   public async getAvailableSlots(): Promise<SlotEntity[]> {
     const slots = await this.prisma.slot.findMany({

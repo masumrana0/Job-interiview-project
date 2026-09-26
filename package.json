@@ -1,19 +1,18 @@
 {
   "name": "appointment-booking-api",
   "version": "1.0.0",
-  "description": "High-concurrency appointment booking API with conflict prevention, Socket.IO real-time updates, and OpenAPI documentation.",
+  "description": "Appointment booking API with concurrency conflict prevention, Socket.IO real-time updates, and OpenAPI documentation.",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "tsx scripts/start-dev.ts",
+    "dev": "tsx watch src/server.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:push": "prisma db push",
     "seed": "tsx prisma/seed.ts",
-    "test": "tsx scripts/test-runner.ts",
-    "test:jest": "jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
     "test:watch": "jest --watch",
     "verify:socket": "tsx scripts/verify-socket.ts",
     "pack:zip": "tsx scripts/package-zip.ts"
@@ -30,7 +29,7 @@
   "author": "Masum Rana",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.4.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -47,13 +46,12 @@
     "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.8",
     "archiver": "^7.0.1",
-    "embedded-postgres": "^18.4.0-beta.17",
     "jest": "^29.7.0",
-    "prisma": "^5.22.0",
+    "prisma": "^6.4.1",
     "socket.io-client": "^4.8.1",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "tsx": "^4.19.2",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   }
 }

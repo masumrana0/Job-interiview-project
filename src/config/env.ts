@@ -8,33 +8,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   HOST: z.string().default('0.0.0.0'),
   CORS_ORIGIN: z.string().default('*'),
-  DATABASE_URL: z
-    .string()
-    .default(
-      process.env.TEST_DATABASE_URL ||
-        process.env.DATABASE_URL ||
-        'postgresql://postgres:postgres@localhost:5432/appointment_db?schema=public'
-    )
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required in .env file.')
 });
 
-export type EnvConfig = z.infer<typeof envSchema>;
-
-let envConfig: EnvConfig;
-
-try {
-  envConfig = envSchema.parse(process.env);
-  if (process.env.NODE_ENV === 'test' && process.env.TEST_DATABASE_URL) {
-    envConfig.DATABASE_URL = process.env.TEST_DATABASE_URL;
-  }
-} catch (error) {
-  if (error instanceof z.ZodError) {
-    console.error('❌ Invalid environment variables:', error.errors);
-  } else {
-    console.error('❌ Environment configuration error:', error);
-  }
-  process.exit(1);
-}
-
-process.env.DATABASE_URL = envConfig.DATABASE_URL;
-
-export const env = envConfig;
+export const env = envSchema.parse(process.env);

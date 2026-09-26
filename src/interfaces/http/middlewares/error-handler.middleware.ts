@@ -5,7 +5,6 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (
   err: any,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ): void => {
   // Handle Body-Parser JSON syntax errors
@@ -30,7 +29,6 @@ export const errorHandlerMiddleware: ErrorRequestHandler = (
     return;
   }
 
-  // Handle unexpected internal failures without exposing database internals or stack traces
   console.error('[Unhandled Internal Error]:', err);
 
   res.status(500).json({

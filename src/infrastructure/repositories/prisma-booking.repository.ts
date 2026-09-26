@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { BookingEntity } from '../../domain/entities';
 import {
   BookingNotFoundError,
@@ -12,12 +12,12 @@ import {
 } from '../../domain/repositories';
 
 export class PrismaBookingRepository implements IBookingRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient) { }
 
   public async bookSlot(params: BookSlotParams): Promise<BookingEntity> {
-    return await this.prisma.$transaction(async (tx) => {
-      // 1. Pessimistic lock on the target slot row
-      // This serializes any concurrent requests attempting to book this exact slot
+
+    return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+
       const lockedSlots = await tx.$queryRaw<Array<{ id: string }>>`
         SELECT "id" FROM "slots" WHERE "id" = ${params.slotId}::uuid FOR UPDATE
       `;
@@ -26,7 +26,7 @@ export class PrismaBookingRepository implements IBookingRepository {
         throw new SlotNotFoundError('Slot not found.');
       }
 
-      // 2. Inspect for any existing active booking for this slot
+      // 2. Inspect for any existing active booking for this slot 
       const existingActive = await tx.booking.findFirst({
         where: {
           slotId: params.slotId,
@@ -54,7 +54,7 @@ export class PrismaBookingRepository implements IBookingRepository {
           slotId: booking.slotId,
           customerName: booking.customerName,
           customerEmail: booking.customerEmail,
-          status: booking.status as 'active' | 'cancelled',
+          status: booking.status,
           createdAt: booking.createdAt,
           updatedAt: booking.updatedAt
         };
@@ -69,7 +69,7 @@ export class PrismaBookingRepository implements IBookingRepository {
   }
 
   public async cancelBooking(bookingId: string): Promise<CancelBookingResult> {
-    return await this.prisma.$transaction(async (tx) => {
+    return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Lock the booking row for update
       const lockedBookings = await tx.$queryRaw<
         Array<{

@@ -10,8 +10,8 @@ export interface SlotEntity {
 
 export interface SlotDto {
   id: string;
-  startsAt: string; // ISO 8601 UTC
-  endsAt: string;   // ISO 8601 UTC
+  startsAt: string;
+  endsAt: string;
 }
 
 export interface BookingEntity {
